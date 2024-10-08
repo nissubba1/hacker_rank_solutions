@@ -421,3 +421,5 @@ BEGIN
     dbms_output.put_line(result);
 END;
 /
+
+-- //////// PSA: I MADE TO GOLD STAR IN SQL TODAY 10/08/2024
