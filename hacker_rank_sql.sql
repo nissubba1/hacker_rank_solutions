@@ -311,6 +311,24 @@ miscalc_avg AS (
 SELECT CEIL(aa.actual_avg - ma.wrong_avg) 
 FROM actual_avg aa, miscalc_avg ma;
 
+-- Top Earners
+-- Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. Then print these values as 2 space-separated integers.
+WITH total_earning as (
+        SELECT (salary * months) AS earning 
+	FROM Employee
+),
+find_max AS (
+    	SELECT MAX(earning) AS max_earning 
+	FROM total_earning
+),
+count_emp AS (
+    	SELECT COUNT(*) AS num_of_emp 
+	FROM find_max fm, total_earning te
+    	WHERE fm.max_earning = te.earning
+)
+SELECT fm.max_earning, ce.num_of_emp 
+FROM find_max fm, count_emp ce;
+
 -- ***************************** MEDIUM *****************************
 
 -- Weather Observation Station 18
