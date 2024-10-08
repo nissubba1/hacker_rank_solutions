@@ -300,6 +300,17 @@ WHERE lat_n =
 				WHERE lat_n > 38.7780
 			);
 
+-- The Blunder
+-- Write a query calculating the amount of error (i.e.: actual - miscalculated average monthly salaries), and round it up to the next integer.
+WITH actual_avg AS (
+		SELECT AVG(salary) AS actual_avg 
+		FROM Employees),
+miscalc_avg AS (
+		SELECT AVG(REGEXP_REPLACE(salary, '[0]', '')) AS wrong_avg 
+		FROM Employees)
+SELECT CEIL(aa.actual_avg - ma.wrong_avg) 
+FROM actual_avg aa, miscalc_avg ma;
+
 -- ***************************** MEDIUM *****************************
 
 -- Weather Observation Station 18
