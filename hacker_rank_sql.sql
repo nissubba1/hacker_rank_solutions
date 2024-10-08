@@ -370,3 +370,54 @@ FROM station;
 -- A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to 4 decimal places.
 SELECT ROUND(MEDIAN(lat_n), 4)
 FROM station;
+
+
+-- Print Prime Numbers
+-- Write a query to print all prime numbers less than or equal to 1000. Print your result on a single line, and use the ampersand () character as your separator (instead of a space).
+-- For example, the output for all prime numbers 7 would be:
+-- 2&3&5&7
+SET SERVEROUTPUT ON;
+-- Loop through i to n times and n mod any i equal 0 which means there is more than 1 divisible, so its not a prime number
+-- Return 0
+-- Else Return 1
+CREATE OR REPLACE FUNCTION isPrime(n INT)
+RETURN INT
+IS
+BEGIN
+    FOR i IN 2..n-1 LOOP
+        IF n MOD i = 0 THEN
+            RETURN 0;
+        END IF;
+    END LOOP;
+    RETURN 1;
+END;
+/
+
+-- Save the result of the function isPrime to a variable num
+-- Remeber that 1 means number is a prime and 0 means it not a prime
+-- You can use booleans value for this too
+-- Create a variable called result which will hold all the prime numbers
+-- Loop through 1000 times starting from 2
+-- Due to concatanation, you have to first check if i is 2
+-- If i = 2, concat the i to the result
+-- Then, check if num is 1 meaning is prime and i does not equal 2
+-- If both condition is true, concat i to the result using result = result || i || '&'
+-- You could have avoided checking if i = 2, but this creates a strange case where the last prime number will have
+-- & symbol, which makes the output wrong.
+DECLARE
+    num INT;
+    result VARCHAR2(2000) := '';
+BEGIN
+    FOR i in 2..1000 LOOP   
+        num := isPrime(i);
+        IF i = 2 THEN
+            result := result || i;
+        END IF;
+        IF num = 1 AND i <> 2 THEN
+            result := result || '&' || i;
+        END IF;
+    END LOOP;
+    
+    dbms_output.put_line(result);
+END;
+/
