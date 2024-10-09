@@ -442,3 +442,41 @@ AND s.score = d.score
 GROUP BY h.hacker_id, h.name
 having count(*) > 1
 order by count(*) desc, h.hacker_id asc;
+
+-- Contest Leaderboard
+/*
+You did such a great job helping Julia with her last coding contest challenge that she wants you to work on this one, too!
+
+The total score of a hacker is the sum of their maximum scores for all of the challenges. Write a query to print the hacker_id, 
+	name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, 
+	then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result.
+*/
+
+WITH get_score
+     AS (SELECT h.hacker_id,
+                name,
+                Max(score) AS hacker_score,
+                challenge_id
+         FROM   submissions s
+                JOIN hackers h
+                  ON s.hacker_id = h.hacker_id
+         GROUP  BY challenge_id,
+                   h.hacker_id,
+                   name),
+     sum_score
+     AS (SELECT hacker_id,
+                SUM(hacker_score) AS total_score
+         FROM   get_score
+         GROUP  BY hacker_id)
+SELECT s.hacker_id,
+       name,
+       total_score
+FROM   sum_score s
+       JOIN get_score g
+         ON s.hacker_id = g.hacker_id
+GROUP  BY s.hacker_id,
+          name,
+          total_score
+HAVING total_score > 0
+ORDER  BY total_score DESC,
+          s.hacker_id; 
