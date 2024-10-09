@@ -423,3 +423,22 @@ END;
 /
 
 -- //////// PSA: I MADE TO GOLD STAR IN SQL TODAY 10/08/2024
+
+-- Top Competitors
+/*
+Julia just finished conducting a coding contest, and she needs your help assembling the 
+leaderboard! Write a query to print the respective hacker_id and name of hackers who achieved full 
+scores for more than one challenge. Order your output in descending order by the total number of 
+challenges in which the hacker earned a full score. If more than one hacker received full scores in 
+same number of challenges, then sort them by ascending hacker_id.
+*/
+
+SELECT h.hacker_id, h.name
+FROM Hackers h, Difficulty d, Challenges c, Submissions s
+WHERE h.hacker_id = s.hacker_id
+AND c.difficulty_level = d.difficulty_level
+AND s.challenge_id = c.challenge_id
+AND s.score = d.score
+GROUP BY h.hacker_id, h.name
+having count(*) > 1
+order by count(*) desc, h.hacker_id asc;
